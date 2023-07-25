@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/// Calculates the index destination pointer in the vector data memory block
 char* calculate_index_dest_ptr(vector* vec, size_t index) {
     return (char*)vec->data + (index * vec->data_size);
 }
@@ -18,19 +19,19 @@ vector* new_vec(size_t dataSize) {
     return newVec;
 }
 
-/// Pushes to a vector
+/// Insert the item into the vector at the last index
 void vec_push(vector* vec, const void* item) {
     vec->length++;
 
     // Reallocates enough space for the new item
     vec->data = realloc(vec->data, vec->length * vec->data_size);
 
-    // Calculate the destination pointer to the last element in the memory block
+    // Destination pointer for the last element in the array
     char* dest = calculate_index_dest_ptr(vec, vec->length - 1); 
     memcpy(dest, item, vec->data_size);
 }
 
-/// Inserts into a vector at a certain position
+/// Inserts an item into the vector at the index
 void vec_insert(vector* vec, const void* item, size_t index) {
     if (index > vec->length){
         vec_push(vec, item);
@@ -56,7 +57,7 @@ void vec_insert(vector* vec, const void* item, size_t index) {
 }
 
 
-/// Removes an item from the vector at the specific index
+/// Removes an item from the vector at the index
 void vec_remove(vector* vec, size_t index) {
     if (index >= vec->length - 1) {
         vec_pop(vec);
@@ -74,11 +75,12 @@ void vec_remove(vector* vec, size_t index) {
 
     memmove(targetDest, src, elementsToMove * vec->data_size);
 
+    // Reallocates enough memory to hold what is needed for the vector
     vec->length--;
     vec->data = realloc(vec->data, vec->length * vec->data_size);
 }
 
-/// Removes the last index from the vector
+/// Removes the item from the vector at the last index
 void vec_pop(vector* vec) {
     if (vec->length == 0) return;
     vec->length--;
